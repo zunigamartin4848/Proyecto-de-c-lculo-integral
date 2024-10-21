@@ -1,15 +1,15 @@
 import math
 import re
 from scipy.integrate import quad
-from tabulate import tabulate  # Importar tabulate para crear la tabla
 
 # Función para agregar '*' entre números y variables (ejemplo: 2x => 2*x)
 def agregar_multiplicacion_implicita(expr):
-    expr_con_asteriscos = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', expr)  # Añade * entre número y variable
+    expr_con_asteriscos = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', expr)
     return expr_con_asteriscos
 
 def f1(x, func1):
     return func1(x)
+
 
 def f2(x, func2):
     return func2(x)
@@ -22,13 +22,13 @@ def areas_entre_curvas(func1, func2, a, b):
     altura_media = f1(puntomedio, func1) - f2(puntomedio, func2)  # Usando el punto medio
     altura_superior = f1(b, func1) - f2(b, func2)  # Usando el extremo derecho
 
-    # Calcular el área como altura * base (diferencia en x) para cada caso
     base = b - a
     area_inferior = altura_inferior * base
     area_media = altura_media * base
     area_superior = altura_superior * base
 
     return area_inferior, area_media, area_superior
+
 
 # Función para calcular el área entre dos curvas mediante integración
 def area_integral(func1, func2, a, b):
@@ -40,7 +40,6 @@ def area_integral(func1, func2, a, b):
 
     return area
 
-# Datos de las funciones y subintervalos
 subintervalos = [
     (51.0, 67.6, "7.23x-362.25", "-0.01x+11.62"),
     (67.6, 84.19999999999999, "-354+111.2math.log(x)", "-0.01x+11.62"),
@@ -63,13 +62,12 @@ subintervalos = [
 suma_inferior_total = 0
 suma_media_total = 0
 suma_superior_total = 0
-suma_integral_total = 0  # Nueva suma total usando integración
-
-# Lista para almacenar los resultados de cada subintervalo
-resultados = []
+suma_integral_total = 0
 
 # Recorrer los subintervalos y calcular el área para cada uno
 for i, (a, b, funcion1_str, funcion2_str) in enumerate(subintervalos):
+    print(f"\nSubintervalo {i + 1}: de {a} a {b}")
+
     # Agregar '*' implícito entre números y variables
     funcion1_str = agregar_multiplicacion_implicita(funcion1_str)
     funcion2_str = agregar_multiplicacion_implicita(funcion2_str)
@@ -83,17 +81,16 @@ for i, (a, b, funcion1_str, funcion2_str) in enumerate(subintervalos):
     # Calcular el área mediante el teorema fundamental del cálculo (integración)
     area_integral_actual = area_integral(funcion1, funcion2, a, b)
 
-    # Almacenar los resultados en la lista para la tabla
-    resultados.append([i + 1, a, b, area_inferior, area_media, area_superior, area_integral_actual])
+    # Imprimir el resultado del área actual
+    print(f"Área inferior {i + 1}: {area_inferior:.6f}")
+    print(f"Área media {i + 1}: {area_media:.6f}")
+    print(f"Área superior {i + 1}: {area_superior:.6f}")
+    print(f"Área por integración {i + 1}: {area_integral_actual:.6f}")
 
-    # Sumar las áreas actuales a las sumas totales
     suma_inferior_total += area_inferior
     suma_media_total += area_media
     suma_superior_total += area_superior
     suma_integral_total += area_integral_actual
-
-# Mostrar la tabla con los resultados de cada subintervalo
-print(tabulate(resultados, headers=["Subintervalo", "a", "b", "Área Inferior", "Área Media", "Área Superior", "Área Integral"], floatfmt=".6f"))
 
 # Imprimir la suma total de las áreas
 print(f"\nSuma total de áreas inferior: {suma_inferior_total:.6f}")
