@@ -1,0 +1,101 @@
+import math
+import re
+from scipy.integrate import quad
+
+def agregar_multiplicacion_implicita(expr):
+    expr_con_asteriscos = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', expr)
+    return expr_con_asteriscos
+
+def f1(x, func1):
+    return func1(x)
+
+def f2(x, func2):
+    return func2(x)
+
+def areas_entre_curvas(func1, func2, a, b):
+    try:
+        puntomedio = (a + b) / 2
+        altura_inferior = f1(a, func1) - f2(a, func2)
+        altura_media = f1(puntomedio, func1) - f2(puntomedio, func2)
+        altura_superior = f1(b, func1) - f2(b, func2)
+        base = b - a
+        area_inferior = altura_inferior * base
+        area_media = altura_media * base
+        area_superior = altura_superior * base
+        return area_inferior, area_media, area_superior
+    except Exception as e:
+        print(f"Error al calcular áreas en el intervalo [{a}, {b}]: {e}")
+        return 0, 0, 0
+
+def area_integral(func1, func2, a, b):
+    try:
+        integrand = lambda x: func1(x) - func2(x)
+        area, _ = quad(integrand, a, b)
+        return area
+    except Exception as e:
+        print(f"Error al calcular la integral en el intervalo [{a}, {b}]: {e}")
+        return 0
+
+def area_integral_subdividida(func1, func2, a, b, n):
+    subintervalos = [(a + i * (b - a) / n, a + (i + 1) * (b - a) / n) for i in range(n)]
+    area_total = 0
+    for ai, bi in subintervalos:
+        area_total += area_integral(func1, func2, ai, bi)
+    return area_total
+
+subintervalos = [
+    (51.0, 67.6, "7.23x-362.25", "-0.01x+11.62"),
+    (67.6, 84.19999999999999, "-354+111.2math.log(x)", "-0.01x+11.62"),
+    (84.2, 100.80000000000001, "-354+111.2math.log(x)", "-0.01x+11.62"),
+    (100.80000000000001, 117.4, "-354+111.2math.log(x)", "-0.01x+11.62"),
+    (117.4, 134.0, "-354+111.2math.log(x)", "0.3x-26.1"),
+    (134.0, 150.6, "-354+111.2math.log(x)", "0.3x-26.1"),
+    (150.60000000000002, 167.20000000000002, "-354+111.2math.log(x)", "0.3x-26.1"),
+    (167.20000000000002, 183.8, "-598+159math.log(x)", "0.3x-26.1"),
+    (183.8, 200.4, "-598+159math.log(x)", "0.3x-26.1"),
+    (200.4, 217.0, "-598+159math.log(x)", "0.3x-26.1"),
+    (217.0, 233.6, "-598+159math.log(x)", "0.3x-26.1"),
+    (233.60000000000002, 250.20000000000002, "-0.03x**2+14.64x-1524", "-1700+321math.log(x)"),
+    (250.20000000000002, 266.8, "-0.03x**2+14.64x-1524", "-1700+321math.log(x)"),
+    (266.8, 283.40000000000003, "-0.03x**2+14.64x-1524", "-1700+321math.log(x)"),
+    (283.40000000000003, 300.00000000000006, "-0.03x**2+14.64x-1524", "-1700+321math.log(x)")
+]
+
+suma_inferior_total = 0
+suma_media_total = 0
+suma_superior_total = 0
+suma_integral_total = 0
+n = 10
+
+for i, (a, b, funcion1_str, funcion2_str) in enumerate(subintervalos):
+    print(f"\nSubintervalo {i + 1}: de {a} a {b}")
+
+    funcion1_str = agregar_multiplicacion_implicita(funcion1_str)
+    funcion2_str = agregar_multiplicacion_implicita(funcion2_str)
+
+    try:
+        funcion1 = eval(f"lambda x: {funcion1_str}", {"math": math})
+        funcion2 = eval(f"lambda x: {funcion2_str}", {"math": math})
+
+        area_inferior, area_media, area_superior = areas_entre_curvas(funcion1, funcion2, a, b)
+        area_integral_actual = area_integral(funcion1, funcion2, a, b)
+        area_subdividida_actual = area_integral_subdividida(funcion1, funcion2, a, b, n)
+
+        print(f"Área inferior {i + 1}: {area_inferior:.6f}")
+        print(f"Área media {i + 1}: {area_media:.6f}")
+        print(f"Área superior {i + 1}: {area_superior:.6f}")
+        print(f"Área por integración {i + 1}: {area_integral_actual:.6f}")
+        print(f"Área por integración con {n} subintervalos: {area_subdividida_actual:.6f}")
+
+        suma_inferior_total += area_inferior
+        suma_media_total += area_media
+        suma_superior_total += area_superior
+        suma_integral_total += area_integral_actual
+
+    except Exception as e:
+        print(f"Error al procesar el subintervalo {i + 1}: {e}")
+
+print(f"\nSuma total de áreas inferior: {suma_inferior_total:.6f}")
+print(f"Suma total de áreas media: {suma_media_total:.6f}")
+print(f"Suma total de áreas superior: {suma_superior_total:.6f}")
+print(f"Suma total de áreas por integración: {suma_integral_total:.6f}")
