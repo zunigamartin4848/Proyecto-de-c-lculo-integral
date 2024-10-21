@@ -1,0 +1,81 @@
+import sympy as sp
+
+# Define la variable simbolica
+x = sp.symbols('x')
+
+# Definir las funciones
+f = -0.01 * x + 11.62  
+g = 7.23 * x - 362.25
+h = 0.3 * x - 26.09 
+p = 321.18 * sp.ln(x) - 1700.03
+r = 111.16 * sp.ln(x) - 354.08
+s = 259.21 * sp.ln(x) - 597.84
+q = -0.03 * x **2 + 14.64*x - 1524.04
+i = 19.44 * x - 5673.3
+t = -9.78 * x + 3094.92
+u = 3.81 * x - 982.51
+
+#Calcular las derivadas de las funciones
+
+derivada_f = sp.diff(f, x)
+derivada_g = sp.diff(g, x)
+derivada_h = sp.diff(h, x)
+derivada_p = sp.diff(p, x)
+derivada_r = sp.diff(r, x)
+derivada_s = sp.diff(s, x)
+derivada_q = sp.diff(q, x)
+derivada_i = sp.diff(i, x)
+derivada_t = sp.diff(t, x)
+derivada_u = sp.diff(u, x)
+
+#Calcular la raiz de 1 + la dervada al cuadrado
+
+coso1 = sp.sqrt(1 + derivada_f**2)
+coso2 = sp.sqrt(1 + derivada_g**2)
+coso3 = sp.sqrt(1 + derivada_h**2)
+coso4 = sp.sqrt(1 + derivada_p**2)
+coso5 = sp.sqrt(1 + derivada_r**2)
+coso6 = sp.sqrt(1 + derivada_s**2)
+coso7 = sp.sqrt(1 + derivada_q**2)
+coso8 = sp.sqrt(1 + derivada_i**2)
+coso9 = sp.sqrt(1 + derivada_t**2)
+coso10 = sp.sqrt(1 + derivada_u**2)
+
+# Definir los límites de integración para cada funcion 
+
+# Calcular la integral definida
+integral_definida_coso1 = sp.integrate(coso1, (x, 51.6, 120.19))
+integral_definida_coso2 = sp.integrate(coso2, (x, 51.6, 64.75))
+integral_definida_coso3 = sp.integrate(coso3, (x, 120.19, 223.23))
+integral_definida_coso4 = sp.integrate(coso4, (x, 223.23, 290.69))
+integral_definida_coso5 = sp.integrate(coso5, (x, 64.75, 170.27))
+integral_definida_coso6 = sp.integrate(coso6, (x, 170.27, 234.93))
+integral_definida_coso7 = sp.integrate(coso7, (x, 234.93, 297.21))
+integral_definida_coso8 = sp.integrate(coso8, (x, 299.25, 300))
+integral_definida_coso9 = sp.integrate(coso9, (x, 299.25, 300))
+integral_definida_coso10 = sp.integrate(coso10, (x, 299.25, 300))
+
+# Mostrar el resultado
+print("La longitudes de las curvas de las funciones (en orden) son:")
+print(integral_definida_coso1)
+print()
+print(integral_definida_coso2)
+print()
+print(integral_definida_coso3)
+print()
+print(integral_definida_coso4)
+print()
+print(integral_definida_coso5)
+print()
+print(integral_definida_coso6)
+print()
+print(integral_definida_coso7)
+print()
+print(integral_definida_coso8)
+print()
+print(integral_definida_coso9)
+print()
+print(integral_definida_coso10)
+print()
+print("El perimetro total es: ")
+print(integral_definida_coso1 + integral_definida_coso2 + integral_definida_coso3 + integral_definida_coso4 + integral_definida_coso5 + integral_definida_coso6 + integral_definida_coso7 + integral_definida_coso8 + integral_definida_coso9 + integral_definida_coso10)
